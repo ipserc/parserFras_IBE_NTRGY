@@ -52,9 +52,9 @@
 """
 
 __all__ = []
-__version__ = 1.0
+__version__ = 1.1
 __date__ = '2021-03-22'
-__updated__ = '2021-03-22'
+__updated__ = '2021-03-23'
 
 import os
 import io
@@ -72,6 +72,8 @@ DEBUG_ON = True
 INFO = "INFO"
 WARN = "WARN"
 ERROR = "ERROR"
+CMD_PDFTOTEXT = os.path.join(os.path.dirname(os.path.abspath(__file__)),"xpdf-tools-linux-4.02/bin64/pdftotext")
+
 
 def sprintf(*args, **kwargs):
     sio = io.StringIO()
@@ -82,8 +84,8 @@ def printDebug(*args, **kwargs):
 	if DEBUG_ON:
 		print("["+str(datetime.datetime.now())+"] - DEBUG :" + sprintf(*args, **kwargs))
 
-def printTraza(strTipoINFO, *args, **kwargs):
-	print("["+str(datetime.datetime.now())+"] - "+strTipoINFO+" :" + sprintf(*args, **kwargs))
+def printTraza(strTipoTRAZA, *args, **kwargs):
+	print("["+str(datetime.datetime.now())+"] - "+strTipoTRAZA+" :" + sprintf(*args, **kwargs))
 
 def readAfile():
 	path = "/home/ipserc/Documentos/Facturas/Iberdrola.Electricidad Galileo 108/2021"
@@ -202,7 +204,7 @@ def extractInfo_ELEC_IBE(theText):
 def pdfToTxt_ELEC_IBE(filepath, excelDataTable):
 	pdfFP = filepath
 	txtFP = filepath+".txt"
-	os.system(os.path.join(os.path.dirname(os.path.abspath(__file__)),"xpdf-tools-linux-4.02/bin64/pdftotext -table '%s' '%s'" % (pdfFP, txtFP)))
+	os.system(CMD_PDFTOTEXT + " -table '%s' '%s'" % (pdfFP, txtFP))
 	fr = codecs.open(txtFP, "r", "ISO-8859-1")
 	printTraza(INFO, "Factura PDF convertida a txt:", txtFP)	
 	excelDataTable.append(extractInfo_ELEC_IBE(fr.readlines()))
@@ -281,7 +283,7 @@ def getDataFromPdf_GAS_NTRGY(iniPath):
 def pdfToTxt_GAS_NTRGY(filepath):
 	pdfFP = filepath
 	txtFP = filepath+".txt"
-	os.system(os.path.join(os.path.dirname(os.path.abspath(__file__)),"xpdf-tools-linux-4.02/bin64/pdftotext -table '%s' '%s'" % (pdfFP, txtFP)))
+	os.system(CMD_PDFTOTEXT + " -table '%s' '%s'" % (pdfFP, txtFP))
 	# ---printDebug("Parsing ", txtFP,". . .")
 	fr = codecs.open(txtFP, "r", "ISO-8859-1")
 	printTraza(INFO, "Factura PDF convertida a txt:", txtFP)	
