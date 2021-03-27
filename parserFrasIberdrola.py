@@ -507,7 +507,7 @@ def printStats():
 
 def main():
 	printStats()
-	iniPath = "/home/ipserc/Documentos/Facturas/Iberdrola.Electricidad Galileo 108"
+	iniPath = "/home/ipserc/Documentos/Facturas/Iberdrola Electricidad Madrid"
 	printTraza(__INFO__, "Procesando Facturas de ELECTRICIDAD de ", "IBERDROLA")
 	excelDataTable = getDataFromPdf_ELEC(__IBRDL__, iniPath)
 	writeToCSV_ELEC(__IBRDL__, iniPath, excelDataTable)
