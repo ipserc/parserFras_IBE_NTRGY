@@ -52,9 +52,9 @@
 """
 
 __all__ = []
-__version__ = 2.4
+__version__ = 2.5
 __date__ = '2021-03-22'
-__updated__ = '2021-03-28'
+__updated__ = '2021-03-30'
 
 import os
 import io
@@ -127,7 +127,7 @@ def repeat(cadena, veces):
 	return textorep
 
 def boxTitleRandom(size, title):
-	boxNbr = random.randint(1, 6)
+	boxNbr = random.randint(1, 7)
 	if boxNbr == 1:
 		return boxTitle1(size, title)
 	elif boxNbr == 2:
@@ -140,6 +140,8 @@ def boxTitleRandom(size, title):
 		return boxTitle5(size, title)
 	elif boxNbr == 6:
 		return boxTitle6(size, title)
+	elif boxNbr == 7:
+		return boxTitle7(size, title)
 
 def makeBoxTitle(size, title, csi, top, csd, msi, msd, mdi, mdd, cii, bot, cid, nmid = False ):
 	boxTitle = ""
@@ -201,6 +203,13 @@ def boxTitle6(size, title):
 	"_", "_", "_", \
 	"\\",     "/", \
 	"[",      "]", \
+	"/", "_", "\\" )
+	
+def boxTitle7(size, title):
+	return makeBoxTitle(size, title, \
+	"_", "_", "_", \
+	"\\",     "/", \
+	"(",      ")", \
 	"/", "_", "\\" )
 	
 def printProgFacts(size):
@@ -441,11 +450,10 @@ def getDataFromPdf_ELEC(comp, iniPath):
 		for fileName in files:
 			if re.match(".*Saltar", root):
 				continue
-			if re.match(".*\d{4}", root):
-				filepath = os.path.join(root, fileName)
-				if filepath.endswith(".pdf"):
-					printTraza(__INFO__, "Procesando Factura PDF:", filepath)
-					pdfToTxt_ELEC(comp, filepath, excelDataTable)
+			filepath = os.path.join(root, fileName)
+			if filepath.endswith(".pdf"):
+				printTraza(__INFO__, "Procesando Factura PDF:", filepath)
+				pdfToTxt_ELEC(comp, filepath, excelDataTable)
 						
 	printDebug("excelDataTable:", excelDataTable)
 	return excelDataTable
@@ -547,14 +555,13 @@ def getDataFromPdf_GAS_NTRGY(iniPath):
 		for fileName in files:
 			if re.match(".*Saltar", root):
 				continue
-			if re.match(".*\d{4}", root):
-				filepath = os.path.join(root, fileName)
-				if filepath.endswith(".pdf"):
-					printTraza(__INFO__, "Procesando Factura PDF:", filepath)
-					subExcelDT = pdfToTxt_GAS_NTRGY(filepath)
-					printDebug("+ + + + + + subExcelDT:", subExcelDT)
-					for dtRow in subExcelDT:
-						excelDataTable.append(dtRow)	
+			filepath = os.path.join(root, fileName)
+			if filepath.endswith(".pdf"):
+				printTraza(__INFO__, "Procesando Factura PDF:", filepath)
+				subExcelDT = pdfToTxt_GAS_NTRGY(filepath)
+				printDebug("+ + + + + + subExcelDT:", subExcelDT)
+				for dtRow in subExcelDT:
+					excelDataTable.append(dtRow)	
 	printDebug("excelDataTable:", excelDataTable)
 	#'''
 	return excelDataTable
@@ -715,6 +722,7 @@ def printGASstats(comp, excelDataTable):
 		print("Total Coste Energia Consumida (€)........:", CosteEnergiaConsumida)
 		print(repeat("-", __BOX_SIZE__))
 
+
 #############################
 # Main
 #############################
@@ -734,7 +742,7 @@ def main():
 	writeToCSV_ELEC(__NTRGY__, iniPath, excelDataTable_ELEC_NTRGY)
 
 	# Procesar Facturas de GAS de NATURGY	
-	iniPath = os.path.join(__USER_HOME__, "Documentos/Facturas/Gas Natural Fenosa")
+	iniPath = os.path.join(__USER_HOME__, "Documentos/Facturas/Naturgy Gas Madrid")
 	printTraza(__INFO__, "Procesando Facturas de GAS de ", "NATURGY")
 	excelDataTable_GAS_NTRGY = getDataFromPdf_GAS_NTRGY(iniPath)
 	writeToCSV_GAS_NTRGY(iniPath, excelDataTable_GAS_NTRGY)
